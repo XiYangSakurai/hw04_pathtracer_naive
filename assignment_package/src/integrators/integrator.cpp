@@ -13,8 +13,8 @@ void Integrator::Render()
     // For every pixel in the FilmTile:
     for(Point2i pixel : tilePixels)
     {
-        ///Uncomment this to debug a particular pixel within this tile
-//        if(pixel.x != 200 && pixel.y != 200)
+//        ///Uncomment this to debug a particular pixel within this tile
+//        if(pixel.x != 291 && pixel.y != 223)
 //        {
 //            continue;
 //        }

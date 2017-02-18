@@ -123,6 +123,24 @@ void Triangle::ComputeTriangleTBN(const Point3f &P, Normal3f *nor, Vector3f *tan
 {
     *nor = GetNormal(P);
     //TODO: Compute tangent and bitangent based on UV coordinates.
+
+//    Vector3f deltaPos1=points[1]-points[0];
+//    Vector3f deltaPos2=points[2]-points[0];
+//    Vector2f deltaUV1=uvs[1]-uvs[0];
+//    Vector2f deltaUV2=uvs[2]-uvs[0];
+//    float r = 1.0f / (deltaUV1.x * deltaUV2.y - deltaUV1.y * deltaUV2.x);
+//    Vector3f tangent = (deltaPos1 * deltaUV2.y   - deltaPos2 * deltaUV1.y)*r;
+//    Vector3f bitangent = (deltaPos2 * deltaUV1.x   - deltaPos1 * deltaUV2.x)*r;
+    Point2f triUV=GetUVCoordinates(P);
+    Vector3f pos1=P-points[1];
+    Vector3f pos2=P-points[2];
+    Vector2f uv1=triUV-uvs[1];
+    Vector2f uv2=triUV-uvs[2];
+    Vector3f tangent=(uv2.y*pos1-uv1.y*pos2)/(uv2.y*uv1.x-uv1.y*uv2.x);
+    Vector3f bitangent=(pos2-uv2.x*tangent)/uv2.y;
+
+    *tan=glm::normalize(tangent);
+    *bit=glm::normalize(bitangent);
 }
 
 
@@ -138,6 +156,9 @@ void Mesh::ComputeTBN(const Point3f &P, Normal3f *nor, Vector3f *tan, Vector3f *
 {
     *nor = transform.invTransT() * (*nor);
     //TODO: Transform nor, tan, and bit into world space
+    *tan=glm::normalize(Vector3f(transform.T()*glm::vec4(*tan,1.0f)));
+    *bit=glm::normalize(Vector3f(transform.T()*glm::vec4(*bit,1.0f)));
+
 }
 
 

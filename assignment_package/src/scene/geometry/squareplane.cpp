@@ -3,7 +3,12 @@
 float SquarePlane::Area() const
 {
     //TODO
-    return 0.f;
+    Point3f p0=glm::vec3(transform.T()*glm::vec4(0.5f,0.5f,0,1));
+    Point3f p1=glm::vec3(transform.T()*glm::vec4(0.5f,-0.5f,0,1));
+    Point3f p2=glm::vec3(transform.T()*glm::vec4(-0.5f,0.5f,0,1));
+    return glm::length(glm::cross(p1-p0,p2-p0));
+    //return 1.0f;
+    //return 0.f;
 }
 
 bool SquarePlane::Intersect(const Ray &ray, Intersection *isect) const
@@ -27,6 +32,11 @@ void SquarePlane::ComputeTBN(const Point3f &P, Normal3f *nor, Vector3f *tan, Vec
 {
     *nor = glm::normalize(transform.invTransT() * Normal3f(0,0,1));
     //TODO: Compute tangent and bitangent
+    Vector3f tangent=Vector3f(1.0,0,0);
+    Vector3f bitangent=Vector3f(0,1.0,0);
+    //CoordinateSystem(Normal3f(0,0,1),&tangent,&bitangent);
+    *tan=glm::normalize(Vector3f(transform.T()* glm::vec4(tangent,1.0f)));
+    *bit=glm::normalize(Vector3f(transform.T()* glm::vec4(bitangent,1.0f)));
 }
 
 

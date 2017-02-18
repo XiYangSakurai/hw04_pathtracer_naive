@@ -4,7 +4,7 @@
 float Cube::Area() const
 {
     //TODO
-    return 0;
+    return 6;
 }
 
 // Returns +/- [0, 2]
@@ -77,6 +77,11 @@ void Cube::ComputeTBN(const Point3f& P, Normal3f* nor, Vector3f* tan, Vector3f* 
 {
     *nor = glm::normalize(transform.invTransT() * GetCubeNormal(P));
     //TODO: Compute tangent and bitangent
+    Vector3f tangent;
+    Vector3f bitangent;
+    CoordinateSystem(GetCubeNormal(P),&tangent,&bitangent);
+    *tan=glm::normalize(Vector3f(transform.T()* glm::vec4(tangent,1.0f)));
+    *bit=glm::normalize(Vector3f(transform.T()* glm::vec4(bitangent,1.0f)));
 }
 
 glm::vec2 Cube::GetUVCoordinates(const glm::vec3 &point) const
